@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#58cc02"><meta name="description" content="تعلم الإنجليزية والفرنسية باللغة العربية">
+<link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>LingoPro | تعلم اللغات</title>
+<style>
+:root{--g:#58cc02;--gd:#399600;--ink:#263238;--muted:#718096;--bg:#f5f7fb;--line:#e6ebf1}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+header{background:var(--g);color:white;padding:20px 18px 25px;border-radius:0 0 26px 26px}
+.top,.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.logo{font-size:24px;font-weight:950}.streak,.badge{background:#ffffff30;padding:7px 11px;border-radius:20px;font-weight:800}
+header h1{font-size:22px;margin:18px 0 4px}header p{margin:0;opacity:.95}
+main{max-width:650px;margin:auto;padding:17px 15px 100px}.title{font-size:18px;font-weight:900;margin:22px 2px 12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.lang,.card{background:white;border:0;border-radius:18px;padding:16px;box-shadow:0 3px 0 #e2e7ed}
+.lang{text-align:right;cursor:pointer;color:var(--ink)}.flag{font-size:34px}.lang b{display:block;font-size:17px;margin:7px 0 3px}.muted,small{color:var(--muted)}
+.card{margin-top:13px}.barbg{height:10px;background:#edf0f4;border-radius:10px;overflow:hidden;margin:12px 0 5px}.bar{height:100%;width:0;background:var(--g);border-radius:10px}
+button{font:inherit;cursor:pointer}.primary{width:100%;border:0;background:var(--g);color:#fff;font-weight:900;padding:13px;border-radius:14px;box-shadow:0 4px 0 var(--gd);margin-top:12px}.secondary{background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 13px;font-weight:750}
+.word{font-size:32px;font-weight:950;text-align:center;direction:ltr;margin:22px 0 4px}.translation{text-align:center;font-size:19px;color:var(--muted)}
+.example{direction:ltr;text-align:center;background:#f4f8fb;padding:13px;border-radius:13px;margin-top:17px}.center{text-align:center}
+.option{width:100%;text-align:center;padding:13px;background:white;border:2px solid var(--line);border-radius:13px;font-weight:800;margin-top:9px}.option:focus{border-color:var(--g)}
+.feedback{text-align:center;font-weight:850;min-height:26px;margin-top:10px}.hidden{display:none!important}
+nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:9px 3px calc(9px + env(safe-area-inset-bottom));z-index:4}
+nav button{border:0;background:none;color:var(--muted);font-size:12px;font-weight:800}nav span{display:block;font-size:21px}
+</style></head>
+<body>
+<header><div class="top"><div class="logo">🌟 LingoPro</div><div class="streak">🔥 <span id="streak">1</span> يوم</div></div><h1>تعلّم لغة جديدة كل يوم!</h1><p>الإنجليزية والفرنسية — من الصفر وبالعربية.</p></header>
+<main>
+<section id="home">
+ <div class="title">اختر اللغة</div><div class="grid">
+  <button class="lang" onclick="startCourse('en')"><div class="flag">🇬🇧</div><b>الإنجليزية</b><small>مستوى المبتدئين A1</small></button>
+  <button class="lang" onclick="startCourse('fr')"><div class="flag">🇫🇷</div><b>الفرنسية</b><small>مستوى المبتدئين A1</small></button>
+ </div>
+ <div class="title">إنجازاتك</div><div class="card"><div class="row"><b>الكلمات التي راجعتها</b><span class="badge" id="learned">0 كلمة</span></div><div class="barbg"><div class="bar" id="totalbar"></div></div><small>كل كلمة جديدة تقرّبك من هدفك.</small></div>
+ <div class="card"><div class="row"><b>🎯 هدف اليوم</b><span class="badge">5 كلمات</span></div><p class="muted">ابدأ بخمس كلمات بسيطة، واستمع إلى نطقها ثم اختبر نفسك.</p><button class="primary" onclick="startCourse('en')">ابدأ التعلم</button></div>
+</section>
+<section id="course" class="hidden">
+ <button class="secondary" onclick="show('home')">→ الرئيسية</button>
+ <div class="row" style="margin-top:15px"><div><small id="courseName">الإنجليزية</small><h2 style="margin:3px 0">المستوى A1</h2></div><span class="badge" id="counter">1 / 20</span></div>
+ <div class="barbg"><div class="bar" id="lessonbar"></div></div>
+ <div class="card center"><small>الكلمة الجديدة</small><div class="word" id="term"></div><div class="translation" id="meaning"></div><button class="secondary" style="margin-top:13px" onclick="speak()">🔊 استمع للنطق</button><div class="example" id="sentence"></div><div class="muted" id="sentenceAr" style="margin-top:8px"></div></div>
+ <button class="primary" onclick="completeWord()">حفظت الكلمة، التالي ←</button>
+</section>
+<section id="quiz" class="hidden">
+ <button class="secondary" onclick="show('home')">→ الرئيسية</button><h2>اختبر نفسك 🧠</h2>
+ <div class="card"><small>اختر الترجمة الصحيحة</small><div class="word" id="qword"></div><div id="choices"></div><div class="feedback" id="result"></div></div>
+ <button class="primary" onclick="quizNext()">سؤال آخر</button>
+</section>
+<section id="profile" class="hidden">
+ <h2>ملفي الشخصي 👤</h2><div class="card"><h3>متعلم LingoPro</h3><p class="muted">تقدمك محفوظ على هذا الجهاز.</p><div class="row"><span>الكلمات المكتملة</span><b id="profileCount">0</b></div><div class="row" style="margin-top:12px"><span>إجابات صحيحة</span><b id="score">0</b></div></div>
+ <button class="secondary" style="margin-top:15px" onclick="resetProgress()">إعادة ضبط التقدم</button>
+</section>
+</main>
+<nav><button onclick="show('home')"><span>🏠</span>الرئيسية</button><button onclick="startCourse('en')"><span>📚</span>الدروس</button><button onclick="show('quiz');quizNext()"><span>🧠</span>اختبار</button><button onclick="show('profile');stats()"><span>👤</span>حسابي</button></nav>
+<script>
+const data={
+en:[
+['Hello','مرحبا','Hello, how are you?','مرحبا، كيف حالك؟'],['Goodbye','إلى اللقاء','Goodbye, see you tomorrow.','إلى اللقاء، أراك غدا.'],['Please','من فضلك','Please, help me.','من فضلك، ساعدني.'],['Thank you','شكرا','Thank you very much.','شكرا جزيلا.'],['Yes','نعم','Yes, I understand.','نعم، أنا أفهم.'],['No','لا','No, thank you.','لا، شكرا.'],['Water','ماء','I drink water.','أنا أشرب الماء.'],['Food','طعام','The food is good.','الطعام لذيذ.'],['House','منزل','This is my house.','هذا منزلي.'],['Friend','صديق','He is my friend.','هو صديقي.'],['Family','عائلة','I love my family.','أحب عائلتي.'],['Work','عمل','I go to work.','أذهب إلى العمل.'],['School','مدرسة','The school is big.','المدرسة كبيرة.'],['Book','كتاب','I read a book.','أقرأ كتابا.'],['Morning','صباح','Good morning!','صباح الخير!'],['Night','ليل','Good night.','تصبح على خير.'],['Today','اليوم','Today is a good day.','اليوم يوم جميل.'],['Tomorrow','غدا','See you tomorrow.','أراك غدا.'],['Beautiful','جميل','The city is beautiful.','المدينة جميلة.'],['Help','مساعدة','I need help.','أحتاج إلى المساعدة.']],
+fr:[
+['Bonjour','مرحبا','Bonjour, comment ça va ?','مرحبا، كيف حالك؟'],['Au revoir','إلى اللقاء','Au revoir et à bientôt.','إلى اللقاء وإلى قريب.'],['S’il vous plaît','من فضلك','Aidez-moi, s’il vous plaît.','ساعدني من فضلك.'],['Merci','شكرا','Merci beaucoup.','شكرا جزيلا.'],['Oui','نعم','Oui, je comprends.','نعم، أنا أفهم.'],['Non','لا','Non, merci.','لا، شكرا.'],['Eau','ماء','Je bois de l’eau.','أنا أشرب الماء.'],['Nourriture','طعام','La nourriture est bonne.','الطعام جيد.'],['Maison','منزل','Voici ma maison.','هذا منزلي.'],['Ami','صديق','C’est mon ami.','هذا صديقي.'],['Famille','عائلة','J’aime ma famille.','أحب عائلتي.'],['Travail','عمل','Je vais au travail.','أذهب إلى العمل.'],['École','مدرسة','L’école est grande.','المدرسة كبيرة.'],['Livre','كتاب','Je lis un livre.','أقرأ كتابا.'],['Matin','صباح','Bonjour !','صباح الخير!'],['Nuit','ليل','Bonne nuit.','تصبح على خير.'],['Aujourd’hui','اليوم','Aujourd’hui, il fait beau.','الطقس جميل اليوم.'],['Demain','غدا','À demain !','أراك غدا!'],['Beau','جميل','C’est un beau jour.','إنه يوم جميل.'],['Aide','مساعدة','J’ai besoin d’aide.','أحتاج إلى المساعدة.']]
+};
+let language='en',position=0,current=null;
+const getDone=()=>JSON.parse(localStorage.getItem('lp_done')||'[]');
+function show(id){['home','course','quiz','profile'].forEach(s=>document.getElementById(s).classList.toggle('hidden',s!==id));window.scrollTo(0,0)}
+function startCourse(l){language=l;position=0;render();show('course')}
+function render(){let a=data[language][position];term.textContent=a[0];meaning.textContent=a[1];sentence.textContent=a[2];sentenceAr.textContent=a[3];courseName.textContent=language==='en'?'🇬🇧 الإنجليزية':'🇫🇷 الفرنسية';counter.textContent=(position+1)+' / '+data[language].length;lessonbar.style.width=((position+1)/data[language].length*100)+'%'}
+function speak(){let u=new SpeechSynthesisUtterance(data[language][position][0]);u.lang=language==='en'?'en-US':'fr-FR';speechSynthesis.cancel();speechSynthesis.speak(u)}
+function completeWord(){let done=getDone(),key=language+'-'+position;if(!done.includes(key)){done.push(key);localStorage.setItem('lp_done',JSON.stringify(done))}position=(position+1)%data[language].length;render();stats();if(position===0)alert('أحسنت! أنهيت كلمات هذا المستوى.')}
+function allItems(){return Object.entries(data).flatMap(([l,arr])=>arr.map((a,i)=>({l,i,w:a[0],m:a[1]})))}
+function quizNext(){let pool=allItems();current=pool[Math.floor(Math.random()*pool.length)];qword.textContent=current.w;result.textContent='';let wrong=pool.filter(x=>x.m!==current.m).sort(()=>Math.random()-.5).slice(0,3).map(x=>x.m);[current.m,...wrong].sort(()=>Math.random()-.5).forEach(v=>{let b=document.createElement('button');b.className='option';b.textContent=v;b.onclick=()=>answer(v);choices.appendChild(b)});choices.innerHTML='';[current.m,...wrong].sort(()=>Math.random()-.5).forEach(v=>{let b=document.createElement('button');b.className='option';b.textContent=v;b.onclick=()=>answer(v);choices.appendChild(b)})}
+function answer(v){let ok=v===current.m;result.textContent=ok?'إجابة صحيحة! أحسنت 🎉':'ليست صحيحة، حاول مجددا 💪';result.style.color=ok?'#329400':'#c77700';if(ok){let n=+(localStorage.getItem('lp_score')||0)+1;localStorage.setItem('lp_score',n);stats()}}
+function stats(){let n=getDone().length;learned.textContent=n+' كلمة';profileCount.textContent=n;score.textContent=localStorage.getItem('lp_score')||0;totalbar.style.width=Math.min(n/40*100,100)+'%'}
+function resetProgress(){if(confirm('هل تريد حذف تقدمك؟')){localStorage.removeItem('lp_done');localStorage.removeItem('lp_score');stats()}}
+stats();
+if('serviceWorker' in navigator && location.protocol!=='file:'){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
+</script></body></html>
